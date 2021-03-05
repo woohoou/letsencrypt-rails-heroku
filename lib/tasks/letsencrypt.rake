@@ -102,7 +102,7 @@ namespace :letsencrypt do
         raise e if e.is_a?(RuntimeError) && !e.message.include?("redirection forbidden")
         if Time.now - start_time <= 60
           puts "Error fetching challenge, retrying... #{e.message}"
-          sleep(5)
+          sleep(10)
           retry
         else
           failure_message = "Error waiting for response from http://#{hostname}/#{challenge.filename}, Error: #{e.message}"

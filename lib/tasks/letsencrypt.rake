@@ -10,8 +10,10 @@ namespace :letsencrypt do
     # Check configuration looks OK
     abort "letsencrypt-rails-heroku is configured incorrectly. Are you missing an environment variable or other configuration? You should have heroku_token, heroku_app, acme_email and acme_terms_agreed configured either via a `Letsencrypt.configure` block in an initializer or as environment variables." unless Letsencrypt.configuration.valid?
 
-
     puts URI.open("http://anibarragani.com/.well-known/acme-challenge/CmUVIZq-y2Pvu5gHLCbanKEfCVu9a4f_YmP36Ms2VJ8").read
+    puts URI.open("http://www.anibarragani.com/.well-known/acme-challenge/CmUVIZq-y2Pvu5gHLCbanKEfCVu9a4f_YmP36Ms2VJ8").read
+    puts URI.open("http://buenaidea.shop/.well-known/acme-challenge/CmUVIZq-y2Pvu5gHLCbanKEfCVu9a4f_YmP36Ms2VJ8").read
+    puts URI.open("http://www.buenaidea.shop/.well-known/acme-challenge/CmUVIZq-y2Pvu5gHLCbanKEfCVu9a4f_YmP36Ms2VJ8").read
 
     # Set up Heroku client
     heroku = PlatformAPI.connect_oauth Letsencrypt.configuration.heroku_token
@@ -86,7 +88,9 @@ namespace :letsencrypt do
       hostname = heroku.domain.list(heroku_app).first['hostname']
       
       # Wait at least a little bit, otherwise the first request will almost always fail.
-      sleep(2)
+      sleep(10)
+
+      puts URI.open("http://#{hostname}/#{challenge.filename}").read
 
       start_time = Time.now
 
@@ -118,7 +122,7 @@ namespace :letsencrypt do
           failure_message = "Failed - timed out waiting for challenge verification."
           raise Letsencrypt::Error::VerificationTimeoutError, failure_message
         end
-        sleep(2)
+        sleep(10)
         challenge.reload
       end
 

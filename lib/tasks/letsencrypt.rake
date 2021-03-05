@@ -88,8 +88,10 @@ namespace :letsencrypt do
       start_time = Time.now
 
       begin
-        open("http://#{hostname}/#{challenge.filename}").read
+        puts "Read #{"http://#{hostname}/#{challenge.filename}"}"
+        URI.open("http://#{hostname}/#{challenge.filename}").read
       rescue OpenSSL::SSL::SSLError, OpenURI::HTTPError, RuntimeError => e
+        puts e.message
         raise e if e.is_a?(RuntimeError) && !e.message.include?("redirection forbidden")
         if Time.now - start_time <= 60
           puts "Error fetching challenge, retrying... #{e.message}"

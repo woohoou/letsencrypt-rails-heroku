@@ -10,6 +10,9 @@ namespace :letsencrypt do
     # Check configuration looks OK
     abort "letsencrypt-rails-heroku is configured incorrectly. Are you missing an environment variable or other configuration? You should have heroku_token, heroku_app, acme_email and acme_terms_agreed configured either via a `Letsencrypt.configure` block in an initializer or as environment variables." unless Letsencrypt.configuration.valid?
 
+
+    puts URI.open("http://anibarragani.com/.well-known/acme-challenge/CmUVIZq-y2Pvu5gHLCbanKEfCVu9a4f_YmP36Ms2VJ8").read
+
     # Set up Heroku client
     heroku = PlatformAPI.connect_oauth Letsencrypt.configuration.heroku_token
     heroku_app = Letsencrypt.configuration.heroku_app
